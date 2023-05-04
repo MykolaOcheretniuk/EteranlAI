@@ -1,0 +1,6 @@
+SignUp:
+  handler: src/lambdas/users/signUp.handler
+  events:
+    - httpApi:
+        path: /signUp
+        method: POST

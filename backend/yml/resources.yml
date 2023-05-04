@@ -1,0 +1,12 @@
+Resources:
+  EternalAiDb:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: MySQL
+      DBName: EternalAiDb
+      DBInstanceClass: db.t3.micro
+      MasterUsername: ${ssm:ETERNAL_AI_DB_USERNAME}
+      MasterUserPassword: ${ssm:ETERNAL_AI_DB_PASSWORD}
+      AllocatedStorage: 5
+      BackupRetentionPeriod: 0
+      PubliclyAccessible: true

@@ -1,0 +1,137 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "bd83b11d-171f-41ad-af94-4aa3100efb01",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "Individuals": {
+      "name": "Individuals",
+      "columns": {
+        "Name": {
+          "name": "Name",
+          "type": "varchar(100)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "Subscribers": {
+      "name": "Subscribers",
+      "columns": {
+        "UserId": {
+          "name": "UserId",
+          "type": "varchar(70)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Subscribers_UserId_Users_Id_fk": {
+          "name": "Subscribers_UserId_Users_Id_fk",
+          "tableFrom": "Subscribers",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ]
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "Users": {
+      "name": "Users",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "varchar(70)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "Email": {
+          "name": "Email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "PasswordHash": {
+          "name": "PasswordHash",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "UserIndividualChat": {
+      "name": "UserIndividualChat",
+      "columns": {
+        "UserId": {
+          "name": "UserId",
+          "type": "varchar(70)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "IndividualName": {
+          "name": "IndividualName",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "UserIndividualChat_UserId_Users_Id_fk": {
+          "name": "UserIndividualChat_UserId_Users_Id_fk",
+          "tableFrom": "UserIndividualChat",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ]
+        },
+        "UserIndividualChat_IndividualName_Individuals_Name_fk": {
+          "name": "UserIndividualChat_IndividualName_Individuals_Name_fk",
+          "tableFrom": "UserIndividualChat",
+          "tableTo": "Individuals",
+          "columnsFrom": [
+            "IndividualName"
+          ],
+          "columnsTo": [
+            "Name"
+          ]
+        }
+      },
+      "compositePrimaryKeys": {}
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
