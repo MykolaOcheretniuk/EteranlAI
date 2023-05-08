@@ -5,4 +5,6 @@ export type EnvVariables =
   | "DB_PORT"
   | "ETERNAL_AI_DB_NAME"
   | "ACCESS_TOKEN_SECRET"
-  | "REGION";
+  | "REGION"
+  | "CHAT_GPT_API_KEY"
+  | "CHAT_GPT_URL";

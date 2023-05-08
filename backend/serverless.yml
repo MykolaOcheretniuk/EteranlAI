@@ -12,6 +12,11 @@ provider:
   region: us-east-1
   httpApi:
     cors: true
+    authorizers:
+      customAuthorizer:
+        type: request
+        functionName: AuthorizeUser
+        identitySource: $request.header.Authorization
   environment:
     ETERNAL_AI_DB_USERNAME: ${ssm:ETERNAL_AI_DB_USERNAME}
     ETERNAL_AI_DB_PASSWORD: ${ssm:ETERNAL_AI_DB_PASSWORD}
@@ -19,6 +24,8 @@ provider:
     DB_PORT: ${ssm:DEFAULT_DB_PORT}
     ETERNAL_AI_DB_NAME: EternalAiDb
     ACCESS_TOKEN_SECRET: ${ssm:ACCESS_TOKEN_SECRET}
+    CHAT_GPT_API_KEY: ${ssm:CHAT_GPT_API_KEY}
+    CHAT_GPT_URL: ${ssm:CHAT_GPT_URL}
 
 functions: ${file(yml/functions.yml)}
 resources: ${file(yml/resources.yml)}

@@ -12,10 +12,29 @@ export const handler = async (
     if (!event.body) {
       return { body: JSON.stringify("JSON body is missing"), statusCode: 400 };
     }
-    const signInRequest = JSON.parse(event.body) as SignUpLoginModel;
-    const a = await usersService.signUp(signInRequest);
-    return { body: JSON.stringify(a), statusCode: 200 };
+    if (!event.pathParameters) {
+      return {
+        body: JSON.stringify("Path params is missing"),
+        statusCode: 400,
+      };
+    }
+    const { action } = event.pathParameters;
+    const request = JSON.parse(event.body) as SignUpLoginModel;
+    switch (action) {
+      case "login":
+        const loginResult = await usersService.login(request);
+        return { body: JSON.stringify(loginResult), statusCode: 200 };
+      case "signUp":
+        const signUpResult = await usersService.signUp(request);
+        return { body: JSON.stringify(signUpResult), statusCode: 200 };
+      default: {
+        return {
+          body: JSON.stringify("Incorrect path parameters"),
+          statusCode: 400,
+        };
+      }
+    }
   } catch (err) {
-    return { body: JSON.stringify(err), statusCode: 400 };
+    return { body: JSON.stringify(`${err}`), statusCode: 400 };
   }
 };
