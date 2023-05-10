@@ -22,7 +22,9 @@ class ChatGptService {
         },
       }
     );
-    return data;
+    const { choices: answerData } = data;
+    const { message: answerMessage } = answerData[0];
+    return answerMessage.content;
   };
 }
 const chatGptService = new ChatGptService();

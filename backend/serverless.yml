@@ -26,6 +26,7 @@ provider:
     ACCESS_TOKEN_SECRET: ${ssm:ACCESS_TOKEN_SECRET}
     CHAT_GPT_API_KEY: ${ssm:CHAT_GPT_API_KEY}
     CHAT_GPT_URL: ${ssm:CHAT_GPT_URL}
+    STRIPE_SECRET_KEY: ${ssm:STRIPE_SECRET_KEY}
 
 functions: ${file(yml/functions.yml)}
 resources: ${file(yml/resources.yml)}

@@ -2,6 +2,7 @@ import { User, users } from "../schema/user";
 import { BaseRepository } from "./baseRepository";
 import { eq } from "drizzle-orm";
 import { userIndividualChat } from "../schema/userIndividual";
+import { Subscriber, subscribers } from "../schema/subscriber";
 class UsersRepository extends BaseRepository {
   getById = async (id: string): Promise<User> => {
     const result = await this.db.select().from(users).where(eq(users.id, id));
@@ -37,6 +38,24 @@ class UsersRepository extends BaseRepository {
       .select({ individualName: userIndividualChat.individualName })
       .from(userIndividualChat)
       .where(eq(userIndividualChat.userId, userId));
+    return result[0];
+  };
+  updateUser = async (user: User) => {
+    const { id } = user;
+    await this.db.update(users).set(user).where(eq(users.id, id));
+  };
+  isSubscriber = async (userId: string): Promise<Subscriber> => {
+    const result = await this.db
+      .select({
+        questions: users.questions,
+        userId: subscribers.userId,
+        subscriptionStart: subscribers.subscriptionStart,
+        subscriptionEnds: subscribers.subscriptionEnds,
+        stripeSubId: subscribers.stripeSubId,
+      })
+      .from(subscribers)
+      .innerJoin(users, eq(users.id, subscribers.userId))
+      .where(eq(subscribers.userId, userId));
     return result[0];
   };
 }

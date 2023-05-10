@@ -7,5 +7,7 @@ export class UsersError extends ApiError {
   static WrongPassword() {
     return new UsersError(`Incorrect password`, 400);
   }
-
+  static QuestionsLimit() {
+    return new UsersError(`your 5 free question is over`, 403);
+  }
 }

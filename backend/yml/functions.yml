@@ -25,3 +25,37 @@ GetAnswer:
         method: POST
         authorizer:
           name: customAuthorizer
+
+Subscribe:
+  handler: src/lambdas/payments/subscribe.handler
+  events:
+    - httpApi:
+        path: /subscribe
+        method: POST
+        authorizer:
+          name: customAuthorizer
+
+StripeWebhookHandler:
+  handler: src/lambdas/payments/stripeWebhook.handler
+  events:
+    - httpApi:
+        path: /handleWebhook
+        method: POST
+
+UpdateUser:
+  handler: src/lambdas/users/updateAccountInfo.handler
+  events:
+    - httpApi:
+        path: /user
+        method: PUT
+        authorizer:
+          name: customAuthorizer
+
+CancelSubscription:
+  handler: src/lambdas/payments/cancelSubscription.handler
+  events:
+    - httpApi:
+        path: /user/payments/cancelSubscription
+        method: POST
+        authorizer:
+          name: customAuthorizer
