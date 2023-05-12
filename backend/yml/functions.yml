@@ -30,7 +30,7 @@ Subscribe:
   handler: src/lambdas/payments/subscribe.handler
   events:
     - httpApi:
-        path: /subscribe
+        path: /user/payments/subscribe
         method: POST
         authorizer:
           name: customAuthorizer
@@ -56,6 +56,15 @@ CancelSubscription:
   events:
     - httpApi:
         path: /user/payments/cancelSubscription
+        method: POST
+        authorizer:
+          name: customAuthorizer
+
+UpdatePaymentMethod:
+  handler: src/lambdas/payments/updatePaymentMethod.handler
+  events:
+    - httpApi:
+        path: /user/updatePaymentMethod
         method: POST
         authorizer:
           name: customAuthorizer

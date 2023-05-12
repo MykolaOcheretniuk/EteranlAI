@@ -21,6 +21,7 @@
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
+    "@types/stripe": "^8.0.417",
     "@serverless/typescript": "^3.0.0",
     "@types/aws-lambda": "^8.10.108",
     "@types/axios": "^0.14.0",

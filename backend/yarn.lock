@@ -378,6 +378,13 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.13.tgz#da4bfd73f49bd541d28920ab0e2bf0ee80f71c91"
   integrity sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
 
+"@types/stripe@^8.0.417":
+  version "8.0.417"
+  resolved "https://registry.yarnpkg.com/@types/stripe/-/stripe-8.0.417.tgz#b651677a9fc33be8ce8fd5bceadd7ca077214244"
+  integrity sha512-PTuqskh9YKNENnOHGVJBm4sM0zE8B1jZw1JIskuGAPkMB+OH236QeN8scclhYGPA4nG6zTtPXgwpXdp+HPDTVw==
+  dependencies:
+    stripe "*"
+
 "@types/uuid@8.3.4":
   version "8.3.4"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
@@ -3840,7 +3847,7 @@ strip-outer@^1.0.1:
   dependencies:
     escape-string-regexp "^1.0.2"
 
-stripe@^12.4.0:
+stripe@*, stripe@^12.4.0:
   version "12.4.0"
   resolved "https://registry.yarnpkg.com/stripe/-/stripe-12.4.0.tgz#44ebb32891d90b2ae1d63b00b7c59c9d28777a09"
   integrity sha512-QjZRzKi3wf8TsuJf/fd6/ejfPgwNptDIzFogRWaRzP3oMJnSD73I2YxR0Eje5zfrU8FmddYWZYawoUejqN+o1w==

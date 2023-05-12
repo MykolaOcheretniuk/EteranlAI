@@ -3,16 +3,14 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda/trigger/api-gateway-proxy";
 import usersService from "src/services/usersService";
+import responseCreator from "src/utils/responseCreator";
 
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
     if (!event.requestContext.authorizer) {
-      return {
-        body: JSON.stringify(`Authorizer context is missing`),
-        statusCode: 400,
-      };
+      return responseCreator.missedRequestAuthorizerContext();
     }
     if (!event.body) {
       return { body: JSON.stringify("JSON body is missing"), statusCode: 400 };
@@ -25,6 +23,6 @@ export const handler = async (
       statusCode: 200,
     };
   } catch (err) {
-    return { body: JSON.stringify(`${err}`), statusCode: 400 };
+    return responseCreator.error(err);
   }
 };

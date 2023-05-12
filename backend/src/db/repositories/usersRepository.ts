@@ -49,9 +49,8 @@ class UsersRepository extends BaseRepository {
       .select({
         questions: users.questions,
         userId: subscribers.userId,
-        subscriptionStart: subscribers.subscriptionStart,
-        subscriptionEnds: subscribers.subscriptionEnds,
         stripeSubId: subscribers.stripeSubId,
+        stripeCustomerId: subscribers.stripeCustomerId,
       })
       .from(subscribers)
       .innerJoin(users, eq(users.id, subscribers.userId))

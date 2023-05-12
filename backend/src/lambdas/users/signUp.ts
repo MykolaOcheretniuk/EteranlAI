@@ -4,6 +4,7 @@ import {
 } from "aws-lambda/trigger/api-gateway-proxy";
 import { SignUpLoginModel } from "src/models/users/signUpLogin";
 import usersService from "src/services/usersService";
+import responseCreator from "src/utils/responseCreator";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -35,6 +36,6 @@ export const handler = async (
       }
     }
   } catch (err) {
-    return { body: JSON.stringify(`${err}`), statusCode: 400 };
+    return responseCreator.error(err);
   }
 };

@@ -27,6 +27,7 @@ provider:
     CHAT_GPT_API_KEY: ${ssm:CHAT_GPT_API_KEY}
     CHAT_GPT_URL: ${ssm:CHAT_GPT_URL}
     STRIPE_SECRET_KEY: ${ssm:STRIPE_SECRET_KEY}
+    STRIPE_PRICE_ID: ${ssm:STRIPE_PRICE_ID}
 
 functions: ${file(yml/functions.yml)}
 resources: ${file(yml/resources.yml)}

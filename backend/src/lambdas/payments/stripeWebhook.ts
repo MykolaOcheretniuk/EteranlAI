@@ -3,6 +3,7 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda/trigger/api-gateway-proxy";
 import usersService from "src/services/usersService";
+import responseCreator from "src/utils/responseCreator";
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
@@ -13,14 +14,17 @@ export const handler = async (
     const eventBody = JSON.parse(event.body);
     switch (eventBody.type) {
       case "invoice.payment_succeeded": {
-        const { customer_email: customerEmail, lines } = eventBody.data.object;
-        const { end, start } = lines.data[0].period;
+        const {
+          customer_email: customerEmail,
+          lines,
+          customer,
+        } = eventBody.data.object;
         const { subscription: subId } = lines.data[0];
-        await usersService.addToSubscribers(customerEmail, end, start, subId);
+        await usersService.addToSubscribers(customerEmail, subId, customer);
       }
     }
     return { body: JSON.stringify(eventBody), statusCode: 200 };
   } catch (err) {
-    return { body: JSON.stringify(err), statusCode: 400 };
+    return responseCreator.error(err);
   }
 };

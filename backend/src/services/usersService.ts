@@ -10,6 +10,7 @@ import jwtTokensService from "src/utils/jwtTokensService";
 import passwordService from "src/utils/passwordService";
 import { uuid } from "uuidv4";
 import chatGptService from "./chatGptService";
+import stripeService from "./stripeService";
 
 class UsersService {
   signUp = async (model: SignUpLoginModel) => {
@@ -63,25 +64,24 @@ class UsersService {
     const { individualName } = await usersRepository.getCurrentIndividual(
       userId
     );
+    const answer = await chatGptService.getAnswer(individualName, question);
     const subscriber = await usersRepository.isSubscriber(userId);
-    const { subscriptionEnds } = subscriber;
-    const currentUnixSeconds = Date.now() / 1000;
-    if (!subscriber || currentUnixSeconds > subscriptionEnds) {
+    const subStatus = await stripeService.getSubscriptionStatus(userId);
+    if (!subscriber || subStatus !== "active") {
       const { questions } = existingUser;
       if (questions === 0) {
         throw UsersError.QuestionsLimit();
       }
       existingUser.questions--;
       await usersRepository.updateUser(existingUser);
-      return await chatGptService.getAnswer(individualName, question);
+      return answer;
     }
-    return await chatGptService.getAnswer(individualName, question);
+    return answer;
   };
   addToSubscribers = async (
     userEmail: string,
-    subscriptionEnds: number,
-    subscriptionStart: number,
-    stripeSubId: string
+    stripeSubId: string,
+    stripeCustomerId: string
   ) => {
     const existingUser = await usersRepository.getByEmail(userEmail);
     if (!existingUser) {
@@ -90,9 +90,8 @@ class UsersService {
     const { id } = existingUser;
     const subscriber: InsetSubscriber = {
       userId: id,
-      subscriptionEnds: subscriptionEnds,
-      subscriptionStart: subscriptionStart,
       stripeSubId: stripeSubId,
+      stripeCustomerId: stripeCustomerId,
     };
     const isSubscriber = await usersRepository.isSubscriber(id);
     if (!isSubscriber) {
@@ -101,7 +100,7 @@ class UsersService {
     await subscribersRepository.updateSubscriber(subscriber);
   };
   updateUser = async (userModel: UserUpdate, userId: string) => {
-    const { password, email } = userModel;
+    const { password, email, name } = userModel;
     const existingUser = await usersRepository.getById(userId);
     if (!existingUser) {
       throw ApiError.NotFound("User");
@@ -109,6 +108,10 @@ class UsersService {
     const { email: existingUserEmail } = existingUser;
     if (existingUserEmail === email) {
       throw ApiError.AlreadyExists("User");
+    }
+    const isSubscriber = await usersRepository.isSubscriber(userId);
+    if (isSubscriber) {
+      await stripeService.updateCustomer(userId, email, name);
     }
     const { questions, id } = existingUser;
     const user: User = Object.assign({}, userModel, {
