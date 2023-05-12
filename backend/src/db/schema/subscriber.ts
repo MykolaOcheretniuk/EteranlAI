@@ -1,5 +1,5 @@
 import { InferModel } from "drizzle-orm";
-import { mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { User, users } from "./user";
 
 export const subscribers = mysqlTable("Subscribers", {
@@ -8,6 +8,7 @@ export const subscribers = mysqlTable("Subscribers", {
     .references(() => users.id),
   stripeSubId: varchar("StripeSubId", { length: 100 }).notNull(),
   stripeCustomerId: varchar("StripeCustomerId", { length: 100 }).notNull(),
+  nextPaymentDate: int("nextPaymentDate").notNull(),
 });
 
 export type SubscribersTable = typeof subscribers;
@@ -16,6 +17,7 @@ interface Sub extends User {
   userId: string;
   stripeSubId: string;
   stripeCustomerId: string;
+  nextPaymentDate: number;
 }
 export type Subscriber = Omit<
   Sub,

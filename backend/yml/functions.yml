@@ -51,6 +51,15 @@ UpdateUser:
         authorizer:
           name: customAuthorizer
 
+GetAccountDetails:
+  handler: src/lambdas/users/getAccountDetails.handler
+  events:
+    - httpApi:
+        path: /user
+        method: GET
+        authorizer:
+          name: customAuthorizer
+
 CancelSubscription:
   handler: src/lambdas/payments/cancelSubscription.handler
   events:

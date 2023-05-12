@@ -4,3 +4,12 @@ export interface UserUpdate {
   phoneNumber: string;
   password: string;
 }
+
+export interface UserModel {
+  name: string | null;
+  email: string;
+  phoneNumber: string | null;
+  subscriptionInfo: {
+    nextPaymentDate: string;
+  } | null;
+}

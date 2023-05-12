@@ -51,6 +51,7 @@ class UsersRepository extends BaseRepository {
         userId: subscribers.userId,
         stripeSubId: subscribers.stripeSubId,
         stripeCustomerId: subscribers.stripeCustomerId,
+        nextPaymentDate: subscribers.nextPaymentDate,
       })
       .from(subscribers)
       .innerJoin(users, eq(users.id, subscribers.userId))

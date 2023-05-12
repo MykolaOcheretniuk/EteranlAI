@@ -41,13 +41,15 @@ class StripeService {
     const { stripeSubId } = await getSubscriber(userId);
     await this.stripe.subscriptions.cancel(stripeSubId);
   };
-  getSubscriptionStatus = async (userId: string) => {
+  getSubscription = async (userId: string) => {
     const { stripeSubId, stripeCustomerId } = await getSubscriber(userId);
     const subscribes = await this.stripe.subscriptions.list({
       customer: stripeCustomerId,
       status: "all",
     });
-    return subscribes.data.find((sub) => sub.id === stripeSubId)?.status;
+    return subscribes.data.find(
+      (sub) => sub.id === stripeSubId
+    ) as Stripe.Subscription;
   };
   updateCustomer = async (userId: string, newEmail: string, name: string) => {
     const { stripeCustomerId } = await getSubscriber(userId);

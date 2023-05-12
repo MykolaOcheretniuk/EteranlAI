@@ -1,3 +1,4 @@
+import { format, fromUnixTime } from "date-fns";
 import subscribersRepository from "src/db/repositories/subscribersRepository";
 import usersRepository from "src/db/repositories/usersRepository";
 import { InsetSubscriber } from "src/db/schema/subscriber";
@@ -5,7 +6,7 @@ import { User } from "src/db/schema/user";
 import { ApiError } from "src/errors/apiError";
 import { UsersError } from "src/errors/usersError";
 import { SignUpLoginModel } from "src/models/users/signUpLogin";
-import { UserUpdate } from "src/models/users/user";
+import { UserModel, UserUpdate } from "src/models/users/user";
 import jwtTokensService from "src/utils/jwtTokensService";
 import passwordService from "src/utils/passwordService";
 import { uuid } from "uuidv4";
@@ -66,7 +67,7 @@ class UsersService {
     );
     const answer = await chatGptService.getAnswer(individualName, question);
     const subscriber = await usersRepository.isSubscriber(userId);
-    const subStatus = await stripeService.getSubscriptionStatus(userId);
+    const { status: subStatus } = await stripeService.getSubscription(userId);
     if (!subscriber || subStatus !== "active") {
       const { questions } = existingUser;
       if (questions === 0) {
@@ -81,7 +82,8 @@ class UsersService {
   addToSubscribers = async (
     userEmail: string,
     stripeSubId: string,
-    stripeCustomerId: string
+    stripeCustomerId: string,
+    nextPaymentDate: number
   ) => {
     const existingUser = await usersRepository.getByEmail(userEmail);
     if (!existingUser) {
@@ -92,6 +94,7 @@ class UsersService {
       userId: id,
       stripeSubId: stripeSubId,
       stripeCustomerId: stripeCustomerId,
+      nextPaymentDate: nextPaymentDate,
     };
     const isSubscriber = await usersRepository.isSubscriber(id);
     if (!isSubscriber) {
@@ -121,6 +124,27 @@ class UsersService {
       password: undefined,
     });
     return await usersRepository.updateUser(user);
+  };
+  getAccountDetails = async (userId: string): Promise<UserModel> => {
+    const user = await usersRepository.getById(userId);
+    if (!user) {
+      throw ApiError.NotFound("User");
+    }
+    const userModel: UserModel = Object.assign({}, user, {
+      passwordHash: undefined,
+      id: undefined,
+      subscriptionInfo: null,
+      questions: undefined,
+    });
+    const subscriber = await usersRepository.isSubscriber(userId);
+    if (subscriber) {
+      const { nextPaymentDate } = subscriber;
+      const date = fromUnixTime(nextPaymentDate);
+      userModel.subscriptionInfo = {
+        nextPaymentDate: format(date, "MMMM d, yyyy"),
+      };
+    }
+    return userModel;
   };
 }
 

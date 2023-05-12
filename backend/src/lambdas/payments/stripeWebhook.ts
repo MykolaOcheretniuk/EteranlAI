@@ -19,8 +19,14 @@ export const handler = async (
           lines,
           customer,
         } = eventBody.data.object;
-        const { subscription: subId } = lines.data[0];
-        await usersService.addToSubscribers(customerEmail, subId, customer);
+        const { subscription: subId, period } = lines.data[0];
+        const { end } = period;
+        await usersService.addToSubscribers(
+          customerEmail,
+          subId,
+          customer,
+          end
+        );
       }
     }
     return { body: JSON.stringify(eventBody), statusCode: 200 };
