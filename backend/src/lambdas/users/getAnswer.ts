@@ -17,9 +17,9 @@ export const handler = async (
     }
     const { userId } = event.requestContext.authorizer.lambda;
     const { question } = JSON.parse(event.body);
-    const answer = await usersService.getAnswer(question, userId);
+    const answer = (await usersService.getAnswer(question, userId)) as string;
     return {
-      body: JSON.stringify(answer),
+      body: JSON.stringify({ answer: answer.replace(/"/g, "") }),
       statusCode: 200,
     };
   } catch (err) {

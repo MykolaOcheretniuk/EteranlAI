@@ -10,4 +10,7 @@ export class UsersError extends ApiError {
   static QuestionsLimit() {
     return new UsersError(`your 5 free question is over`, 403);
   }
+  static NoIndividualSet() {
+    return new UsersError("Individual to chat with user was not set", 400);
+  }
 }

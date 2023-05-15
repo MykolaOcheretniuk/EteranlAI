@@ -62,21 +62,25 @@ class UsersService {
     if (!existingUser) {
       throw ApiError.NotFound;
     }
-    const { individualName } = await usersRepository.getCurrentIndividual(
-      userId
-    );
+    const individual = await usersRepository.getCurrentIndividual(userId);
+    if (!individual) {
+      throw UsersError.NoIndividualSet();
+    }
+    const { individualName } = individual;
     const answer = await chatGptService.getAnswer(individualName, question);
     const subscriber = await usersRepository.isSubscriber(userId);
-    const { status: subStatus } = await stripeService.getSubscription(userId);
-    if (!subscriber || subStatus !== "active") {
-      const { questions } = existingUser;
-      if (questions === 0) {
-        throw UsersError.QuestionsLimit();
+    if (subscriber) {
+      const { status: subStatus } = await stripeService.getSubscription(userId);
+      if (subStatus === "active") {
+        return answer;
       }
-      existingUser.questions--;
-      await usersRepository.updateUser(existingUser);
-      return answer;
     }
+    const { questions } = existingUser;
+    if (questions === 0) {
+      throw UsersError.QuestionsLimit();
+    }
+    existingUser.questions--;
+    await usersRepository.updateUser(existingUser);
     return answer;
   };
   addToSubscribers = async (
