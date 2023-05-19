@@ -103,3 +103,88 @@ curl --request POST \
  --data '{
 "question":"Your Name?"
 }'
+
+## Get account details
+
+Response body:
+{
+"name": null | Jane Doe,
+"email": "email@mail.com",
+"phoneNumber": null | +380999999999,
+"subscriptionInfo": null | {"nextPaymentDate": "May 19, 2023"}
+}
+
+curl --request GET \
+ --url https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user \
+ --header 'Authorization: JWT-access-token'
+
+## Update account details
+
+Required JSON body:
+{
+"name": "Jane Doe",
+"email": "testMail@mail.com",
+"phoneNumber": "+38088888888",
+"password": "Passw0rd!!!"
+}
+
+curl --request PUT \
+ --url https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user \
+ --header 'Authorization: JWT-access-token' \
+ --header 'Content-Type: application/json' \
+ --data '{
+"name": "Jane Doe",
+"email": "testMail@mail.com",
+"phoneNumber": "+38088888888",
+"password": "Passw0rd!!!"
+}'
+
+## Subscribe
+
+https://stripe.com/docs/testing?testing-method=card-numbers#visa
+
+Required JSON body:
+{
+"number":"3566002020360505",
+"exp_month": "11",
+"exp_year": "2055",
+"cvc": "111"
+}
+
+curl --request POST \
+ --url https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/payments/subscribe \
+ --header 'Authorization: JWT-access-token' \
+ --header 'Content-Type: application/json' \
+ --data '{
+"number":"3566002020360505",
+"exp_month": "11",
+"exp_year": "2055",
+"cvc": "111"
+}'
+
+## Cancel subscription
+
+curl --request POST \
+ --url https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/payments/cancelSubscription \
+ --header 'Authorization: JWT-access-token'
+
+## Update payment method
+
+Required JSON body:
+{
+"number":"3566002020360505",
+"exp_month": "11",
+"exp_year": "2055",
+"cvc": "111"
+}'
+
+curl --request POST \
+ --url https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/updatePaymentMethod \
+ --header 'Authorization: JWT-access-token' \
+ --header 'Content-Type: application/json' \
+ --data '{
+"number":"3566002020360505",
+"exp_month": "11",
+"exp_year": "2055",
+"cvc": "111"
+}'
