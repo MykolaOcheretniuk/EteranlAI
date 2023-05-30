@@ -74,6 +74,6 @@ UpdatePaymentMethod:
   events:
     - httpApi:
         path: /user/updatePaymentMethod
-        method: POST
+        method: PUT
         authorizer:
           name: customAuthorizer

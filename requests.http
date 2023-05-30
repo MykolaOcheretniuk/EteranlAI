@@ -1,0 +1,104 @@
+# Sign-up
+POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/signUp HTTP/1.1
+content-type: application/json
+
+{
+	"email":"email@email.com",
+	"password":"password"
+}
+
+###
+
+# Login
+POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/login HTTP/1.1
+content-type: application/json
+
+{
+	"email":"email@email.com",
+	"password":"password"
+}
+
+###
+
+# Set Individual 
+POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/choseIndividual HTTP/1.1
+content-type: application/json
+authorization: access token
+
+{
+"individual":"Steve Jobs"
+}
+
+
+###
+
+# Ask question 
+
+POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/getAnswer HTTP/1.1
+content-type: application/json
+authorization: access token
+
+{
+	"question":"Your Name?"
+}
+
+###
+
+# Get account details
+
+GET https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user HTTP/1.1
+authorization: access token
+
+###
+
+# Update account info
+
+PUT https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user
+content-type: application/json
+authorization: access token
+
+{
+  "name": "Jhon Doe",
+  "email": "JhonDoe2@gmail.com",
+  "phoneNumber": "+3807777777",
+  "password": "Passw0rd"
+}
+
+###
+
+# Subscribe
+
+POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/payments/subscribe HTTP/1.1
+content-type: application/json
+authorization: access token
+
+{
+  "number":"3566002020360505",
+  "exp_month": "11",
+  "exp_year": "2055",
+  "cvc": "111"
+}
+
+###
+
+# Update payment method
+
+PUT https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/updatePaymentMethod
+content-type: application/json
+authorization: access token
+
+{
+	"number":"4242424242424242",
+  "exp_month": "11",
+  "exp_year": "2055",
+  "cvc": "111"
+}
+
+###
+
+# Cancel subscription
+
+POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/payments/cancelSubscription HTTP/1.1
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4OTIwMTJkOC0xNmYwLTRhZjEtOTZlMy1iOTEyODMyZjcwYjAiLCJpYXQiOjE2ODU0NDAwOTksImV4cCI6MTY4NTUyNjQ5OX0.siVmL-COtXa3ak9yhBazqS0paFDU8KriIil9Fre6ya4
+
+

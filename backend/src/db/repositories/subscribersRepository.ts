@@ -13,6 +13,11 @@ class SubscribersRepository extends BaseRepository {
       .set(subscriber)
       .where(eq(subscribers.userId, userId));
   };
+  deleteSubscriber = async (stripeCustomerId: string) => {
+    await this.db
+      .delete(subscribers)
+      .where(eq(subscribers.stripeCustomerId, stripeCustomerId));
+  };
 }
 
 const subscribersRepository = new SubscribersRepository(users);

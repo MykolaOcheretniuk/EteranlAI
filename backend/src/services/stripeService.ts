@@ -37,9 +37,11 @@ class StripeService {
       },
     });
   };
-  cancelSubscription = async (userId: string) => {
+  cancelSubscriptionAtPeriodEnd = async (userId: string) => {
     const { stripeSubId } = await getSubscriber(userId);
-    await this.stripe.subscriptions.cancel(stripeSubId);
+    await this.stripe.subscriptions.update(stripeSubId, {
+      cancel_at_period_end: true,
+    });
   };
   getSubscription = async (userId: string) => {
     const { stripeSubId, stripeCustomerId } = await getSubscriber(userId);

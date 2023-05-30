@@ -13,7 +13,7 @@ export const handler = async (
       return responseCreator.missedRequestAuthorizerContext();
     }
     const { userId } = event.requestContext.authorizer.lambda;
-    await stripeService.cancelSubscription(userId);
+    await stripeService.cancelSubscriptionAtPeriodEnd(userId);
     return responseCreator.default(
       JSON.stringify("Subscription canceled"),
       200

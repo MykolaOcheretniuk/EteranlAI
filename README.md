@@ -178,7 +178,7 @@ Required JSON body:
 "cvc": "111"
 }'
 
-curl --request POST \
+curl --request PUT \
  --url https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/updatePaymentMethod \
  --header 'Authorization: JWT-access-token' \
  --header 'Content-Type: application/json' \

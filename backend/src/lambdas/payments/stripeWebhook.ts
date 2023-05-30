@@ -27,9 +27,22 @@ export const handler = async (
           customer,
           end
         );
+        return { body: JSON.stringify("Subscriber added"), statusCode: 200 };
+      }
+      case "customer.subscription.deleted": {
+        const { customer: stripeCustomerId } = eventBody.data.object;
+        await usersService.removeFromSubscribers(stripeCustomerId);
+        return {
+          body: JSON.stringify(
+            `Customer:${stripeCustomerId} removed from subscribers`
+          ),
+          statusCode: 200,
+        };
+      }
+      default: {
+        return { body: JSON.stringify(eventBody), statusCode: 200 };
       }
     }
-    return { body: JSON.stringify(eventBody), statusCode: 200 };
   } catch (err) {
     return responseCreator.error(err);
   }

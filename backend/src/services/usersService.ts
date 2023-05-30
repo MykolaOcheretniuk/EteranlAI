@@ -106,6 +106,9 @@ class UsersService {
     }
     await subscribersRepository.updateSubscriber(subscriber);
   };
+  removeFromSubscribers = async (stripeCustomerId: string) => {
+    await subscribersRepository.deleteSubscriber(stripeCustomerId);
+  };
   updateUser = async (userModel: UserUpdate, userId: string) => {
     const { password, email, name } = userModel;
     const existingUser = await usersRepository.getById(userId);
