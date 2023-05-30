@@ -99,6 +99,6 @@ authorization: access token
 # Cancel subscription
 
 POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/payments/cancelSubscription HTTP/1.1
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4OTIwMTJkOC0xNmYwLTRhZjEtOTZlMy1iOTEyODMyZjcwYjAiLCJpYXQiOjE2ODU0NDAwOTksImV4cCI6MTY4NTUyNjQ5OX0.siVmL-COtXa3ak9yhBazqS0paFDU8KriIil9Fre6ya4
+authorization: access code
 
 
