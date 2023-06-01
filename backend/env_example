@@ -4,6 +4,7 @@ ETERNAL_AI_DB_ENDPOINT: ETERNAL_AI_DB_ENDPOINT
 DB_PORT: 3309
 ETERNAL_AI_DB_NAME: EternalAiDb
 ACCESS_TOKEN_SECRET: 9edfe****-2841-****-9**7-4217d****ee1
+REFRESH_TOKEN_SECRET: 9edfe****-2841-****-9**7-4217d****ee1
 CHAT_GPT_API_KEY: sk-n*****gG**YBp3*******3BlbkFJ6**TSIgVN******pPrlR
 CHAT_GPT_URL: https://api.openai.com/v1/chat/completions
 STRIPE_SECRET_KEY: sk_test_****ooABBi9aS9FZmHvIGt90w*****zqL1NyTceh0bWOTUgbYScbVaaRi*****34RSwHS9NFyhWrkn****cAjET00tIGtQBNh

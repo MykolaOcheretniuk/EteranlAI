@@ -14,10 +14,7 @@ export const handler = async (
     }
     const { userId } = event.requestContext.authorizer.lambda;
     const accountDetails = await usersService.getAccountDetails(userId);
-    return {
-      body: JSON.stringify(accountDetails),
-      statusCode: 200,
-    };
+    return responseCreator.default(JSON.stringify(accountDetails), 200);
   } catch (err) {
     return responseCreator.error(err);
   }

@@ -1,6 +1,9 @@
 import { format, fromUnixTime } from "date-fns";
+import chatLogRepository from "src/db/repositories/chatLogRepository";
+import refreshTokensRepository from "src/db/repositories/refreshTokensRepository";
 import subscribersRepository from "src/db/repositories/subscribersRepository";
 import usersRepository from "src/db/repositories/usersRepository";
+import { ChatLogInsert } from "src/db/schema/chatLog";
 import { InsetSubscriber } from "src/db/schema/subscriber";
 import { User } from "src/db/schema/user";
 import { ApiError } from "src/errors/apiError";
@@ -29,9 +32,7 @@ class UsersService {
       questions: 5,
       phoneNumber: null,
     };
-    const { id: userId } = newUser;
     await usersRepository.addNew(newUser);
-    return await jwtTokensService.generateAccessToken(userId);
   };
   login = async (model: SignUpLoginModel) => {
     const { email, password } = model;
@@ -48,7 +49,12 @@ class UsersService {
       throw UsersError.WrongPassword();
     }
     const { id: userId } = existingUser;
-    return await jwtTokensService.generateAccessToken(userId);
+    const { accessToken } = await jwtTokensService.generateAccessToken(userId);
+    const { refreshToken } = await jwtTokensService.generateRefreshToken(
+      userId
+    );
+    await refreshTokensRepository.addRefreshToken(userId, refreshToken);
+    return { accessToken, refreshToken };
   };
   setIndividual = async (individualName: string, userId: string) => {
     const existingUser = await usersRepository.getById(userId);
@@ -67,11 +73,21 @@ class UsersService {
       throw UsersError.NoIndividualSet();
     }
     const { individualName } = individual;
-    const answer = await chatGptService.getAnswer(individualName, question);
+    const answer = await chatGptService.getAnswerFromClient(
+      individualName,
+      question
+    );
+    const chatLog: ChatLogInsert = {
+      userId,
+      individual: individualName,
+      question,
+      answer,
+    };
     const subscriber = await usersRepository.isSubscriber(userId);
     if (subscriber) {
       const { status: subStatus } = await stripeService.getSubscription(userId);
       if (subStatus === "active") {
+        await chatLogRepository.createChatLog(chatLog);
         return answer;
       }
     }
@@ -81,6 +97,7 @@ class UsersService {
     }
     existingUser.questions--;
     await usersRepository.updateUser(existingUser);
+    await chatLogRepository.createChatLog(chatLog);
     return answer;
   };
   addToSubscribers = async (

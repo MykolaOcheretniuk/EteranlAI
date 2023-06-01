@@ -12,3 +12,5 @@ jspm_packages
 .idea
 
 migrations-folder
+.vscode
+.VSCodeCounter

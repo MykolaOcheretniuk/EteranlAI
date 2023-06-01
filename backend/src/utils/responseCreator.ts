@@ -1,7 +1,19 @@
 import { ApiError } from "src/errors/apiError";
+type Headers =
+  | {
+      [header: string]: boolean | number | string;
+    }
+  | undefined;
 
 class ResponseCreator {
-  default = (data: string, statusCode: number) => {
+  default = (data: string, statusCode: number, headers?: Headers) => {
+    if (headers) {
+      return {
+        statusCode: statusCode,
+        headers: headers,
+        body: data,
+      };
+    }
     return {
       statusCode: statusCode,
       body: data,
@@ -35,6 +47,12 @@ class ResponseCreator {
     return {
       statusCode: 400,
       body: JSON.stringify(`Query string params is missing.`),
+    };
+  };
+  missedPathParameters = () => {
+    return {
+      statusCode: 400,
+      body: JSON.stringify(`Path params is missing.`),
     };
   };
   missedRequestAuthorizerContext = () => {

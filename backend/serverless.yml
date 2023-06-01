@@ -11,7 +11,9 @@ provider:
   profile: myawff
   region: us-east-1
   httpApi:
-    cors: true
+    cors:
+      allowedOrigins: ["*"]
+      allowedHeaders: ["*"]
     authorizers:
       customAuthorizer:
         type: request
@@ -28,6 +30,7 @@ provider:
     CHAT_GPT_URL: ${ssm:CHAT_GPT_URL}
     STRIPE_SECRET_KEY: ${ssm:STRIPE_SECRET_KEY}
     STRIPE_PRICE_ID: ${ssm:STRIPE_PRICE_ID}
+    REFRESH_TOKEN_SECRET: ${ssm:REFRESH_TOKEN_SECRET}
 
 functions: ${file(yml/functions.yml)}
 resources: ${file(yml/resources.yml)}

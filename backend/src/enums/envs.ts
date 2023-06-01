@@ -9,4 +9,5 @@ export type EnvVariables =
   | "CHAT_GPT_API_KEY"
   | "CHAT_GPT_URL"
   | "STRIPE_SECRET_KEY"
-  | "STRIPE_PRICE_ID";
+  | "STRIPE_PRICE_ID"
+  | "REFRESH_TOKEN_SECRET";

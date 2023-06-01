@@ -1,5 +1,5 @@
 SignUpOrLogin:
-  handler: src/lambdas/users/signUp.handler
+  handler: src/lambdas/users/auth.handler
   events:
     - httpApi:
         path: /user/{action}
@@ -7,6 +7,13 @@ SignUpOrLogin:
 
 AuthorizeUser:
   handler: src/lambdas/authorizer.handler
+
+CheckAuth:
+  handler: src/lambdas/checkAuth.handler
+  events:
+    - httpApi:
+        path: /user/checkAuth
+        method: get
 
 ChoseIndividual:
   handler: src/lambdas/users/choseIndividual.handler
@@ -23,6 +30,15 @@ GetAnswer:
     - httpApi:
         path: /getAnswer
         method: POST
+        authorizer:
+          name: customAuthorizer
+
+GetMessages:
+  handler: src/lambdas/messages/getMessages.handler
+  events:
+    - httpApi:
+        path: /getMessages
+        method: GET
         authorizer:
           name: customAuthorizer
 

@@ -14,15 +14,12 @@ export const handler = async (
       return responseCreator.missedRequestAuthorizerContext();
     }
     if (!event.body) {
-      return { body: JSON.stringify("JSON body is missing"), statusCode: 400 };
+      return responseCreator.missedEventBody();
     }
     const { userId } = event.requestContext.authorizer.lambda;
     const { individual } = JSON.parse(event.body) as ChoseIndividual;
     await usersService.setIndividual(individual, userId);
-    return {
-      body: JSON.stringify("Individual set"),
-      statusCode: 200,
-    };
+    return responseCreator.default(JSON.stringify("Individual set"), 200);
   } catch (err) {
     return responseCreator.error(err);
   }

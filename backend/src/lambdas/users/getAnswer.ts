@@ -18,10 +18,10 @@ export const handler = async (
     const { userId } = event.requestContext.authorizer.lambda;
     const { question } = JSON.parse(event.body);
     const answer = (await usersService.getAnswer(question, userId)) as string;
-    return {
-      body: JSON.stringify({ answer: answer.replace(/"/g, "") }),
-      statusCode: 200,
-    };
+    return responseCreator.default(
+      JSON.stringify({ answer: answer.replace(/"/g, "") }),
+      200
+    );
   } catch (err) {
     return responseCreator.error(err);
   }

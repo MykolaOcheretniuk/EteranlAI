@@ -10,4 +10,7 @@ export class ApiError extends Error {
   static AlreadyExists(entity: string) {
     return new ApiError(`${entity} is already exists`, 400);
   }
+  static Unauthorized() {
+    return new ApiError(`Incorrect refresh token`, 401);
+  }
 }

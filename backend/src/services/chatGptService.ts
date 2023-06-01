@@ -1,30 +1,33 @@
-import axios from "axios";
+import { OpenAIApi } from "openai";
+import { Configuration } from "openai/dist/configuration.js";
 import getEnv from "src/utils/getEnv";
 
 class ChatGptService {
-  getAnswer = async (individual: string, question: string) => {
-    const requestUrl = getEnv("CHAT_GPT_URL") as string;
-    const { data } = await axios.post(
-      requestUrl,
-      {
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "user",
-            content: `Give me a possible ${individual} answer to question ${question}`,
-          },
-        ],
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + getEnv("CHAT_GPT_API_KEY"),
-          "Content-Type": "application/json",
+  private configuration: Configuration;
+  private openAi: OpenAIApi;
+
+  constructor() {
+    this.configuration = new Configuration({
+      apiKey: getEnv("CHAT_GPT_API_KEY"),
+    });
+    this.openAi = new OpenAIApi(this.configuration);
+  }
+
+  getAnswerFromClient = async (individual: string, question: string) => {
+    const response = await this.openAi.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: `You are a ${individual}` },
+        {
+          role: "user",
+          content: `Give me a possible ${individual} answer to ${question}`,
         },
-      }
-    );
-    const { choices: answerData } = data;
-    const { message: answerMessage } = answerData[0];
-    return answerMessage.content;
+      ],
+      max_tokens: 1000,
+      temperature: 0.2,
+    });
+    const { choices } = response.data;
+    return choices[0].message?.content as string;
   };
 }
 const chatGptService = new ChatGptService();
