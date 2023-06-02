@@ -1,7 +1,7 @@
 export interface UserUpdate {
-  name: string;
+  name: string | null;
   email: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
   password: string;
 }
 

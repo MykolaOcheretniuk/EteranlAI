@@ -53,8 +53,15 @@ class StripeService {
       (sub) => sub.id === stripeSubId
     ) as Stripe.Subscription;
   };
-  updateCustomer = async (userId: string, newEmail: string, name: string) => {
+  updateCustomer = async (
+    userId: string,
+    newEmail: string,
+    name: string | null
+  ) => {
     const { stripeCustomerId } = await getSubscriber(userId);
+    if (!name) {
+      name = newEmail;
+    }
     await this.stripe.customers.update(stripeCustomerId, {
       email: newEmail,
       name: name,
