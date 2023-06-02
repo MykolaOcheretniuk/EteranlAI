@@ -32,6 +32,7 @@ GetAnswer:
         method: POST
         authorizer:
           name: customAuthorizer
+  timeout: 25
 
 GetMessages:
   handler: src/lambdas/messages/getMessages.handler

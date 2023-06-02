@@ -17,14 +17,13 @@ class ChatGptService {
     const response = await this.openAi.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
-        { role: "system", content: `You are a ${individual}` },
         {
           role: "user",
           content: `Give me a possible ${individual} answer to ${question}`,
         },
       ],
-      max_tokens: 1000,
-      temperature: 0.2,
+      max_tokens: 3000,
+      temperature: 0.1,
     });
     const { choices } = response.data;
     return choices[0].message?.content as string;

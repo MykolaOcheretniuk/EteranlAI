@@ -8,7 +8,7 @@ class MessagesService {
     userId: string
   ): Promise<ChatLogModel[]> => {
     let { limit, page, individual } = params;
-    const offset = +page - 1;
+    const offset = (+page - 1) * +limit;
     return await chatLogRepository.getMessages(
       individual,
       userId,

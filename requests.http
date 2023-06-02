@@ -20,6 +20,24 @@ content-type: application/json
 
 ###
 
+#Refresh token
+
+POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/refresh
+content-type: application/json
+
+{
+"refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3YjljZTQwZS0xNTczLTQyYjgtOTRlYS1hMTFiZWUzYWQ0ZDIiLCJpYXQiOjE2ODU2MzY4NDksImV4cCI6MTY4ODIyODg0OX0.ogi1CsunOkunlitug1CS4k8_1xCIDrkY_RXotTlv4MY"
+}
+
+###
+
+#Check Auth
+
+GET  https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/checkAuth
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3YjljZTQwZS0xNTczLTQyYjgtOTRlYS1hMTFiZWUzYWQ0ZDIiLCJpYXQiOjE2ODU2NDA4NzUsImV4cCI6MTY4NTcyNzI3NX0.TPFFjKmgUlrHCYA9jWgS2AExcdJy40gUMmeIGMWG1BM
+
+###
+
 # Set Individual 
 POST https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/user/choseIndividual HTTP/1.1
 content-type: application/json
@@ -41,6 +59,12 @@ authorization: access token
 {
 	"question":"Your Name?"
 }
+
+###
+
+# Get messages history 
+GET  https://a13nttwcx5.execute-api.us-east-1.amazonaws.com/getMessages?individual=Individual&limit=10&page=1
+authorization: access token
 
 ###
 
