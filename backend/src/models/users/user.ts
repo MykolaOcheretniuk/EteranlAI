@@ -1,8 +1,8 @@
 export interface UserUpdate {
   name: string | null;
-  email: string;
+  email: string | null;
   phoneNumber: string | null;
-  password: string;
+  password: string | null;
 }
 
 export interface UserModel {

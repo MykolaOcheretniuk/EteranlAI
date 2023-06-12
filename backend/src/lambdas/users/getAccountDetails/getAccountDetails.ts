@@ -4,19 +4,19 @@ import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import {
   APIGatewayProxyEvent,
-  APIGatewayProxyResultV2,
+  APIGatewayProxyResult,
 } from "aws-lambda/trigger/api-gateway-proxy";
-import stripeService from "src/services/stripeService";
-import { responseCreator } from "src/utils/responseCreator";
-import { validateAuthContextSchema } from "../types/validateAuthContextSchema";
+import { validateAuthContextSchema } from "src/lambdas/types/validateAuthContextSchema";
+import usersService from "src/services/usersService";
+import {responseCreator} from "src/utils/responseCreator";
 
-const cancelSubscription = async (
+const getAccountDetails = async (
   event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResultV2> => {
+): Promise<APIGatewayProxyResult> => {
   try {
     const { userId } = event.requestContext.authorizer?.lambda;
-    await stripeService.cancelSubscriptionAtPeriodEnd(userId);
-    return { statusCode: 200 };
+    const accountDetails = await usersService.getAccountDetails(userId);
+    return responseCreator.default(JSON.stringify(accountDetails), 200);
   } catch (err) {
     return responseCreator.error(err);
   }
@@ -24,4 +24,4 @@ const cancelSubscription = async (
 export const handler = middy()
   .use(httpErrorHandler())
   .use(validator({ eventSchema: transpileSchema(validateAuthContextSchema) }))
-  .handler(cancelSubscription);
+  .handler(getAccountDetails);

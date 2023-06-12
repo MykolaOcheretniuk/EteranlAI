@@ -132,17 +132,26 @@ class UsersService {
     if (!existingUser) {
       throw ApiError.NotFound("User");
     }
-    const { email: existingUserEmail } = existingUser;
+    const { email: existingUserEmail, passwordHash: oldHash } = existingUser;
     if (existingUserEmail === email) {
       throw ApiError.AlreadyExists("User");
     }
+    let updateEmail = existingUserEmail;
+    if (email !== null) {
+      updateEmail = email;
+    }
     const isSubscriber = await usersRepository.isSubscriber(userId);
     if (isSubscriber) {
-      await stripeService.updateCustomer(userId, email, name);
+      await stripeService.updateCustomer(userId, updateEmail, name);
+    }
+    let passwordHash = oldHash;
+    if (password !== null) {
+      passwordHash = await passwordService.hashPassword(password);
     }
     const { questions, id } = existingUser;
     const user: User = Object.assign({}, userModel, {
-      passwordHash: await passwordService.hashPassword(password),
+      email: updateEmail,
+      passwordHash: passwordHash,
       questions: questions,
       id: id,
       password: undefined,
