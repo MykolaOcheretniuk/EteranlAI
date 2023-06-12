@@ -1,25 +1,22 @@
+import middy from "@middy/core";
+import httpErrorHandler from "@middy/http-error-handler";
+import jsonBodyParser from "@middy/http-json-body-parser";
+import validator from "@middy/validator";
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyEventPathParameters,
   APIGatewayProxyResultV2,
 } from "aws-lambda/trigger/api-gateway-proxy";
+import { SignUpLoginModel } from "src/models/users/signUpLogin";
 import usersService from "src/services/usersService";
-import refreshAccessToken from "src/utils/refreshAccessToken";
-import responseCreator from "src/utils/responseCreator";
-import middy from "@middy/core";
-import jsonBodyParser from "@middy/http-json-body-parser";
+import {responseCreator} from "src/utils/responseCreator";
+import { Action, bodySchema, pathParamsSchema } from "./types";
 import { transpileSchema } from "@middy/validator/transpile";
-import validator from "@middy/validator";
-import httpErrorHandler from "@middy/http-error-handler";
-import { Action, bodySchema, pathParamsSchema } from "./auth/types";
-import { SignUpLoginModel } from "src/models/users/user";
-
 const auth = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResultV2> => {
   try {
-    const body = JSON.stringify(event.body);
-    const payload: SignUpLoginModel = JSON.parse(body);
+    const payload = event.body as unknown as SignUpLoginModel;
     const { action } =
       event.pathParameters as APIGatewayProxyEventPathParameters;
     switch (action) {
@@ -34,7 +31,7 @@ const auth = async (
         );
       case Action.signUp:
         await usersService.signUp(payload);
-        return responseCreator.default(JSON.stringify("User created"), 200);
+        return { statusCode: 200 };
     }
     return { statusCode: 200 };
   } catch (err) {

@@ -9,9 +9,9 @@ import {
 } from "aws-lambda/trigger/api-gateway-proxy";
 import { UserUpdate } from "src/models/users/user";
 import usersService from "src/services/usersService";
-import responseCreator from "src/utils/responseCreator";
-import { contextSchema } from "./requestContextSchema";
-import { updateAccountInfo } from "./updateAccountInfo/types";
+import { responseCreator } from "src/utils/responseCreator";
+import { validateAuthContextSchema } from "../../types/validateAuthContextSchema";
+import { updateAccountInfo } from "./types";
 
 const updateAccountDetails = async (
   event: APIGatewayProxyEvent
@@ -28,6 +28,6 @@ const updateAccountDetails = async (
 export const handler = middy()
   .use(jsonBodyParser())
   .use(httpErrorHandler())
-  .use(validator({ eventSchema: transpileSchema(contextSchema) }))
+  .use(validator({ eventSchema: transpileSchema(validateAuthContextSchema) }))
   .use(validator({ eventSchema: transpileSchema(updateAccountInfo) }))
   .handler(updateAccountDetails);

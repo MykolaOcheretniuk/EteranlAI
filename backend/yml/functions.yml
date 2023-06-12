@@ -1,12 +1,19 @@
 SignUpOrLogin:
-  handler: src/lambdas/users/auth.handler
+  handler: src/lambdas/users/auth/auth.handler
   events:
     - httpApi:
         path: /user/{action}
         method: POST
 
+Refresh:
+  handler: src/lambdas/users/auth/refreshAccessToken.handler
+  events:
+    - httpApi:
+        path: /user/refresh
+        method: POST
+
 AuthorizeUser:
-  handler: src/lambdas/authorizer.handler
+  handler: src/middleware/authorizer.handler
 
 CheckAuth:
   handler: src/lambdas/checkAuth.handler
@@ -16,7 +23,7 @@ CheckAuth:
         method: get
 
 ChoseIndividual:
-  handler: src/lambdas/users/choseIndividual.handler
+  handler: src/lambdas/users/choseIndividual/choseIndividual.handler
   events:
     - httpApi:
         path: /user/choseIndividual
@@ -25,7 +32,7 @@ ChoseIndividual:
           name: customAuthorizer
 
 GetAnswer:
-  handler: src/lambdas/users/getAnswer.handler
+  handler: src/lambdas/users/getAnswer/getAnswer.handler
   events:
     - httpApi:
         path: /getAnswer
@@ -35,7 +42,7 @@ GetAnswer:
   timeout: 25
 
 GetMessages:
-  handler: src/lambdas/messages/getMessages.handler
+  handler: src/lambdas/messages/getMessages/getMessages.handler
   events:
     - httpApi:
         path: /getMessages
@@ -44,7 +51,7 @@ GetMessages:
           name: customAuthorizer
 
 Subscribe:
-  handler: src/lambdas/payments/subscribe.handler
+  handler: src/lambdas/payments/subscribe/subscribe.handler
   events:
     - httpApi:
         path: /user/payments/subscribe
@@ -60,7 +67,7 @@ StripeWebhookHandler:
         method: POST
 
 UpdateUser:
-  handler: src/lambdas/users/updateAccountInfo.handler
+  handler: src/lambdas/users/updateAccountInfo/updateAccountInfo.handler
   events:
     - httpApi:
         path: /user
@@ -69,7 +76,7 @@ UpdateUser:
           name: customAuthorizer
 
 GetAccountDetails:
-  handler: src/lambdas/users/getAccountDetails.handler
+  handler: src/lambdas/users/getAccountDetails/getAccountDetails.handler
   events:
     - httpApi:
         path: /user

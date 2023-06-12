@@ -7,10 +7,10 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
 } from "aws-lambda/trigger/api-gateway-proxy";
+import { validateAuthContextSchema } from "src/lambdas/types/validateAuthContextSchema";
 import usersService from "src/services/usersService";
-import responseCreator from "src/utils/responseCreator";
-import { GetAnswer, getAnswerBody } from "./getAnswer/types";
-import { contextSchema } from "./requestContextSchema";
+import {responseCreator} from "src/utils/responseCreator";
+import { GetAnswer, getAnswerBody } from "./types";
 
 const getAnswer = async (
   event: APIGatewayProxyEvent
@@ -30,6 +30,6 @@ const getAnswer = async (
 export const handler = middy()
   .use(httpErrorHandler())
   .use(jsonBodyParser())
-  .use(validator({ eventSchema: transpileSchema(contextSchema) }))
+  .use(validator({ eventSchema: transpileSchema(validateAuthContextSchema) }))
   .use(validator({ eventSchema: transpileSchema(getAnswerBody) }))
   .handler(getAnswer);

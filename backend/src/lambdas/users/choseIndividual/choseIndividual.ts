@@ -7,11 +7,11 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from "aws-lambda/trigger/api-gateway-proxy";
+import { validateAuthContextSchema } from "src/lambdas/types/validateAuthContextSchema";
 import { ChoseIndividual } from "src/models/users/choseIndividualModel";
 import usersService from "src/services/usersService";
-import responseCreator from "src/utils/responseCreator";
-import { choseIndividualBody } from "./choseIndividual/types";
-import { contextSchema } from "./requestContextSchema";
+import { responseCreator } from "src/utils/responseCreator";
+import { choseIndividualBody } from "./types";
 
 const choseIndividual = async (
   event: APIGatewayProxyEvent
@@ -28,6 +28,6 @@ const choseIndividual = async (
 export const handler = middy()
   .use(jsonBodyParser())
   .use(httpErrorHandler())
-  .use(validator({ eventSchema: transpileSchema(contextSchema) }))
+  .use(validator({ eventSchema: transpileSchema(validateAuthContextSchema) }))
   .use(validator({ eventSchema: transpileSchema(choseIndividualBody) }))
   .handler(choseIndividual);

@@ -6,10 +6,10 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
 } from "aws-lambda/trigger/api-gateway-proxy";
+import { validateAuthContextSchema } from "src/lambdas/types/validateAuthContextSchema";
 import messagesService from "src/services/messagesService";
-import responseCreator from "src/utils/responseCreator";
-import { contextSchema } from "../users/requestContextSchema";
-import { PaginationOptions, queryStringParams } from "./getMessage/types";
+import { responseCreator } from "src/utils/responseCreator";
+import { PaginationOptions, queryStringParams } from "./types";
 
 export const getMessages = async (
   event: APIGatewayProxyEvent
@@ -30,6 +30,6 @@ export const getMessages = async (
 
 export const handler = middy()
   .use(httpErrorHandler())
-  .use(validator({ eventSchema: transpileSchema(contextSchema) }))
+  .use(validator({ eventSchema: transpileSchema(validateAuthContextSchema) }))
   .use(validator({ eventSchema: transpileSchema(queryStringParams) }))
   .handler(getMessages);
